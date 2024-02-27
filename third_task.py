@@ -21,10 +21,6 @@ def load_logs(file_path: str) -> List[Dict[str, str]]:
     return logs
 
 
-def filter_logs_by_level(logs: List[Dict[str, str]], level: str) -> List[Dict[str, str]]:
-    return [log for log in logs if log['level'] == level.upper()]
-
-
 def count_logs_by_level(logs: List[Dict[str, str]]) -> Dict[str, int]:
     counts = {}
     # errors = str
@@ -49,6 +45,10 @@ def display_log_counts(counts: Dict[str, int]):
         print(f"{level:<15} | {count}")
 
 
+def filter_logs_by_level(logs: List[Dict[str, str]], level: str) -> List[Dict[str, str]]:
+    return [log for log in logs if log['level'] == level.upper()]
+
+
 def main():
     if len(sys.argv) < 2:
         file_path = input("Please provide the path to the log file.")
@@ -65,7 +65,9 @@ def main():
         logs = load_logs(file_path)
         counts = count_logs_by_level(logs)
         display_log_counts(counts)
-        filtered_logs = filter_logs_by_level(logs, level)
+        # лямбда вираз, який просили. хоча, як на мене, це дуже ускладнює читаємість коду
+        filtered_logs = list(filter(lambda log: log['level'] == level.upper(), logs))
+        # filtered_logs = filter_logs_by_level(logs, level)
         print(f"\nДеталі логів для рівня 'ERROR':")
         for log in filtered_logs:
             print(f"{log['date']} {log['time']} - {log['message']}")
@@ -82,3 +84,4 @@ if __name__ == "__main__":
 
 # python C:\Users\MikeK\PycharmProjects\in_process\pythonProject\goit-algo-hw-05\third_task.py
 # C:\Users\MikeK\PycharmProjects\in_process\pythonProject\goit-algo-hw-05\logfile.log
+# error
